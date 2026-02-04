@@ -112,7 +112,20 @@
             const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
             return passwordRegex.test(password);
         }
-
+        fetch("localhost:3000", {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ email, password})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = "open.html";
+            } else {
+                document.getElementById("err").textContent = data.message;
+                document.getElementById("err").style.display = "block";
+            }
+        });
     </script>
 </body>
 </html>
