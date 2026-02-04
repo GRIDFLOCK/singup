@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Server</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url("img/back1.jpg");
+            background-size: cover;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .header {
+            font-size: 24px;
+            color: blue;
+            letter-spacing: 1px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            width: 320px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .submit {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: blue;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .submit:hover {
+            background: darkblue;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .content label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .content input {
+            padding: 10px;
+            border: 1px solid gray;
+            border-radius: 10px;
+            outline: none;
+        }
+        .content input:focus {
+            border-color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p>РЕЄСТРАЦІЯ</p>
+        </div>
+        <form class="content" id="registerForm">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="введіть email" required>
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="введіть пароль" minlength="6" required>
+            <p id="err" style="color: red;display: none;"></p>
+            <button class="submit" id="button" type="submit">зареєструватись</button>
+        </form>
+    </div>
+    <script>
+       document.getElementById("registerForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const err = document.getElementById("err");
+
+            if (!validatePassword(password)) {
+                err.textContent = "Пароль повинен містити принаймні 6 символів, включаючи великі та малі літери, цифри та спеціальні символи.";
+                err.style.display = "block";
+                return;
+            }
+            if (!validateEmail(email)) {
+                err.textContent = "Невірний формат пошти!";
+                err.style.display = "block";
+                return;
+         }
+         err.style.display = "none";
+         console.log("Дані валідні, можна відправляти на сервер:", { email, password });
+         window.location.href = "open.html";
+       })
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        function validatePassword(password) {
+            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            return passwordRegex.test(password);
+        }
+
+    </script>
+</body>
+</html>
