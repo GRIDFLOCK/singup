@@ -79,6 +79,7 @@
             <input type="email" id="email" name="email" placeholder="введіть email" required>
             <label for="password">Пароль</label>
             <input type="password" id="password" name="password" placeholder="введіть пароль" minlength="6" required>
+            <input type="password" id="passwordvalited" name="password" placeholder="введіть пароль" minlength="6" required>
             <p id="err" style="color: red;display: none;"></p>
             <button class="submit" id="button" type="submit">зареєструватись</button>
         </form>
@@ -88,6 +89,7 @@
             e.preventDefault();
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
+            const passwordvalited = document.getElementById("passwordvalited").value.trim();
             const err = document.getElementById("err");
 
             if (!validatePassword(password)) {
@@ -99,11 +101,17 @@
                 err.textContent = "Невірний формат пошти!";
                 err.style.display = "block";
                 return;
-         }
+            }
+            if (passwordvalited != password) {
+                err.textContent = "паролі не збігаються"
+                err.style.display = "block"
+                return;
+            }
+         
          err.style.display = "none";
          console.log("Дані валідні, можна відправляти на сервер:", { email, password });
          window.location.href = "open.html";
-       })
+        })
         function validateEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -112,10 +120,14 @@
             const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
             return passwordRegex.test(password);
         }
-        fetch("localhost:3000", {
+        function validatePasswordvalited(passwordvalited) {
+            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            return passwordRegex.test(passwordvalited);
+        }
+        fetch("http://localhost:3000/register", {
            method: "POST",
            headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ email, password})
+           body: JSON.stringify({ email, password, passwordvalited})
         })
         .then(res => res.json())
         .then(data => {
