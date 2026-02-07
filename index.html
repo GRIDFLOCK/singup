@@ -85,13 +85,25 @@
         </form>
     </div>
     <script>
+        function validateEmail(email) {
+             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+             return emailRegex.test(email);
+         }
+         function validatePassword(password) {
+            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            return passwordRegex.test(password);
+         }
+          function validatePasswordvalited(passwordvalited) {
+            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            return passwordRegex.test(passwordvalited);
+          }
        document.getElementById("registerForm").addEventListener("submit", function(e) {
             e.preventDefault();
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
             const passwordvalited = document.getElementById("passwordvalited").value.trim();
             const err = document.getElementById("err");
-
+             
             if (!validatePassword(password)) {
                 err.textContent = "Пароль повинен містити принаймні 6 символів, включаючи великі та малі літери, цифри та спеціальні символи.";
                 err.style.display = "block";
@@ -107,37 +119,24 @@
                 err.style.display = "block"
                 return;
             }
-         
-         err.style.display = "none";
-         console.log("Дані валідні, можна відправляти на сервер:", { email, password });
-         window.location.href = "open.html";
-        })
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-        function validatePassword(password) {
-            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-            return passwordRegex.test(password);
-        }
-        function validatePasswordvalited(passwordvalited) {
-            const passwordRegex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-            return passwordRegex.test(passwordvalited);
-        }
-        fetch("https://beckendgrid.onrender.com", {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ email, password, passwordvalited})
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = "open.html";
-            } else {
-                document.getElementById("err").textContent = data.message;
-                document.getElementById("err").style.display = "block";
-            }
-        });
+            fetch("https://beckendgrid.onrender.com/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password, passwordvalited})
+             })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                  window.location.href = "open.html";
+              } else {
+                 document.getElementById("err").textContent = data.message;
+                 document.getElementById("err").style.display = "block";
+             }
+            })
+
+            err.style.display = "none";
+            console.log("Дані валідні, можна відправляти на сервер:", { email, password });        
+       });
     </script>
 </body>
 </html>
