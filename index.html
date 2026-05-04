@@ -240,8 +240,9 @@
             .then(res => res.json())
             .then(data => {
               if (data.success) {
-                  window.location.href = "login.html";
                   dotspinner.style.display = "block";
+                  window.location.href = "login.html";
+                  
               } else {
                  document.getElementById("err").textContent = data.message;
                  document.getElementById("err").style.display = "block";
